@@ -23,7 +23,7 @@ class RegistrationForm(Form):
     password = PasswordField('密码', validators=[
         Required(message='请输入密码'), EqualTo('password2', message='两次输入的密码必须一致！'), Length(6,16,'密码长度为6-16位')])
     password2 = PasswordField('密码确认', validators=[Required(message='请再次输入密码确认')])
-    doublecheck = StringField('双向认证口令', validators=[Length(0,64)])
+    doublecheck = StringField('双向认证口令', validators=[Required(message='请输入认证口令'), Length(0,64)])
     submit = SubmitField('注册')
 
     def validate_email(self, field):
@@ -76,7 +76,7 @@ class ChangeEmailForm(Form):
             raise ValidationError('邮箱已被注册.')
 
 class DoubleCheckForm(Form):
-    email = StringField('邮箱', validators=[Required(), Length(1, 64),
+    email = StringField('邮箱', validators=[Required('请输入邮箱'), Length(1, 64),
                                              Email(message='这好像是个假邮箱...')])
     submit = SubmitField('认证服务器')
     def validate_email(self, field):
