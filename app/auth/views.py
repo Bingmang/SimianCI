@@ -79,7 +79,6 @@ def register():
 
 # /confirm路由，处理注册时根据token为用户注册帐号的事件
 @auth.route('/confirm/<token>')
-@login_required
 def confirm(token):  # 分析传进的参数token
     if current_user.confirmed:  # 如果用户已经注册认证过了，则返回到登陆界面
         return redirect(url_for('auth.login'))
