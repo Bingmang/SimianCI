@@ -69,6 +69,9 @@ def register():
                     doublecheck=form.doublecheck.data)    
         db.session.add(user)    #将user注册到数据库中
         db.session.commit()     #提交数据
+        user = User.query.filter_by(email=form.email.data).first()  #根据email查询用户
+        if user is not None:   #如果查询到该用户并且验证密码成功
+            login_user(user, form.remember_me.data) #登陆该用户
         token = user.generate_confirmation_token() #生成token
         send_email(user.email, 'Confirm Your Account',
                    'auth/email/confirm', user=user, token=token)
@@ -79,6 +82,7 @@ def register():
 
 # /confirm路由，处理注册时根据token为用户注册帐号的事件
 @auth.route('/confirm/<token>')
+@login_required
 def confirm(token):  # 分析传进的参数token
     if current_user.confirmed:  # 如果用户已经注册认证过了，则返回到登陆界面
         return redirect(url_for('auth.login'))
