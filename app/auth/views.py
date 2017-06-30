@@ -71,7 +71,7 @@ def register():
         db.session.commit()     #提交数据
         user = User.query.filter_by(email=form.email.data).first()  #根据email查询用户
         if user is not None:   #如果查询到该用户并且验证密码成功
-            login_user(user, form.remember_me.data) #登陆该用户
+            login_user(user) #登陆该用户
         token = user.generate_confirmation_token() #生成token
         send_email(user.email, 'Confirm Your Account',
                    'auth/email/confirm', user=user, token=token)
